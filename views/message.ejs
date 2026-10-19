@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mensaje de <%= message.user %></title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <h1>Mensaje de <%= message.user %></h1>
+    <p class="date"><%= message.added.toLocaleString() %></p>
+    <p class="message-text"><%= message.text %></p>
+    <a href="/" class="btn-outline">← Volver</a>
+</body>
+</html>
