@@ -7,30 +7,35 @@
     <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-    <h1>Nuevo mensaje</h1>
-    <form method="POST" action="new">
+    <% if (errors && errors.length > 0){ %>
+        <ul class="errors">
+            <% errors.forEach(function(error){ %>
+                <li><%= error.msg %></li>
+            <%}); %>
+        </ul>
+     <% } %>
+     <form method="POST" action="/new">
         <div class="form-group">
-            <label for="messageUser">Tu nombre</label>
+            <label for="messageUser">Tu Nombre</label>
             <input 
             type="text"
-            id= "messageUser"
+            id="messageUser"
             name="messageUser"
-            required
+            value="<%= oldData ? oldData.messageUser : '' %>"
             maxlength="50"
             />
         </div>
         <div class="form-group">
             <label for="messageText">Mensaje</label>
-            <textarea 
-                id="messageText"
-                name="messageText"
-                required
-                maxlength="500"
-                rows="5" 
-            ></textarea>
+            <textarea  
+            id="messageText"
+            name="messageText"
+            maxlength="500"
+            rows="5"
+            ><%= oldData ? oldData.messageText : '' %></textarea>
         </div>
         <button type="submit" class="btn">Enviar</button>
         <a href="/" class="btn-outline">Cancelar</a>
-    </form>
+     </form>
 </body>
 </html>

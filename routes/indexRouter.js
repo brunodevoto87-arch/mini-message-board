@@ -1,5 +1,7 @@
 const express = require("express");
+const {body,validationResult} = require("express-validator");
 const router = express.Router();
+
 
 //Array de mensajes (en memoria)
 const messages = [
@@ -26,21 +28,40 @@ router.get("/", (req, res)=>{
 });
 //GET / new > formulario
 router.get("/new", (req, res)=>{
-    res.render("form");
+    res.render("form", {
+        errors: [],
+        oldData: null,
+    });
 });
 //Post /new > agregar mensaje
-router.post("/new", (req,res)=>{
-    const {messageText, messageUser} = req.body;
-    if(messageText && messageUser){
+router.post(
+    "/new",
+    body("messageUser")
+        .trim()
+        .isLength({min: 1, max: 50})
+        .withMessage("El nombre es obligatorio(1-50 caracteres)"),
+    body("messageText")
+        .trim()
+        .isLength({min: 1, max: 500})
+        .withMessage("El mensaje es obligatorio(1-500 caracteres)"),
+    (req, res) =>{
+        const errors = validationResult(req);
+        if(!errors.isEmpty()){
+            return res.status(400).render("form", {
+                errors: errors.array(),
+                oldData: req.body,
+            });
+        }
+        const {messageUser, messageText} = req.body;
         messages.push({
             id: nextId++,
             text: messageText,
             user: messageUser,
             added: new Date(),
         });
-    }
-    res.redirect("/");
-});
+        res.redirect("/");
+    } 
+);
 //GET / message /:id > detalle
 router.get("/message/:id", (req, res)=>{
     const id = Number(req.params.id);
